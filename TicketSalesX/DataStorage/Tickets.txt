@@ -1,0 +1,3 @@
+TicketNumber; 150; TicketPrice; 200
+TicketNumber; 200; TicketPrice; 360
+TicketNumber; 1000; TicketPrice; 500
