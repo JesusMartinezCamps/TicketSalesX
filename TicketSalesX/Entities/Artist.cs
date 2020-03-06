@@ -8,11 +8,11 @@ namespace TicketSalesX.Entities
     public class Artist
     {
         //Attributes
-        private string Name { get; set; }
+        public string Name { get; set; }
 
-        private string Type { get; set; }
+        public string Type { get; set; }
 
-        private string Genre { get; set; }
+        public string Genre { get; set; }
 
 
         //Constructor

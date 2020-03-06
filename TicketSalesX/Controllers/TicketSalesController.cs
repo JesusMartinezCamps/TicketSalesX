@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TicketSalesX.Business;
+using TicketSalesX.Entities;
+using System.Text.Json;
+
 
 namespace TicketSalesX.Controllers
 {
@@ -18,8 +21,21 @@ namespace TicketSalesX.Controllers
         [HttpGet]
         public ActionResult FestivalArtists(string festivalName)
         {
+            List<Artist> artists = Business.DataAccess.GetArtistsByFestivalName(festivalName);
+            var json = JsonSerializer.Serialize(artists);
+            return Ok(json);
+        }
 
-            return (StatusCode(200));
+
+
+        //Ticket Stock
+        [Route("/TicketSales/stock/")]
+        [HttpGet]
+        public ActionResult FestivalTicketStock()
+        {
+            List<Ticket> ticketPrice = Business.DataAccess.GetStock();
+            var json = JsonSerializer.Serialize(ticketPrice);
+            return Ok(json);
         }
     }
 }

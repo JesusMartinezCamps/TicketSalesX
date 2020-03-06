@@ -1,7 +1,7 @@
-David Peta, Solista, Electrónica
-Martin Partyx, Solista, Electrónica
-Kaigo, Solista, Electrónica
-Mariana Grande, Solista, Pop
-The Painsmokers, Grupo, Rock
-Melena Gomez, Solista, Pop
-La banda local, Grupo, Desconocido
+David Peta,Solista,Electronica
+Martin Partyx,Solista,Electronica
+Kaigo,Solista,Electronica
+Mariana Grande,Solista,Pop
+The Painsmokers,Grupo,Rock
+Melena Gomez,Solista,Pop
+La banda local,Grupo,Desconocido
