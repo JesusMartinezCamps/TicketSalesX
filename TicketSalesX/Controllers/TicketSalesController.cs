@@ -7,7 +7,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketSalesX.Entities;
 using System.Text.Json;
-
+using System.Net;
+using System.IO;
+using TicketSalesX.Business;
+using TicketSalesX.Models;
+using System.Data;
 
 namespace TicketSalesX.Controllers
 {
@@ -21,21 +25,33 @@ namespace TicketSalesX.Controllers
         [HttpGet]
         public ActionResult FestivalArtists(string festivalName)
         {
-            List<Artist> artists = Business.DataAccess.GetArtistsByFestivalName(festivalName);
+            List<Artist> artists = DataAccess.GetArtistsByFestivalName(festivalName);
             var json = JsonSerializer.Serialize(artists);
             return Ok(json);
         }
-
-
 
         //Ticket Stock
         [Route("/TicketSales/stock/")]
         [HttpGet]
         public ActionResult FestivalTicketStock()
         {
-            List<Ticket> ticketPrice = Business.DataAccess.GetStock();
+            List<Ticket> ticketPrice = DataAccess.GetStock();
             var json = JsonSerializer.Serialize(ticketPrice);
             return Ok(json);
+        }
+
+        //Ticket Sales
+        [Route("/TicketSales/comprar/")]
+        [HttpPost]
+        public ActionResult FestivalTicketSale([FromBody]TicketSaleRq ticketSaleRq)
+        {
+            TicketSaleRs ticketSaleRs = new TicketSaleRs();
+            ticketSaleRs.DateTime = DateTime.Now.Hour.ToString() + ':' + DateTime.Now.Minute.ToString();
+            ticketSaleRs.Cost = SalerManager.CalculateTicketPrice(ticketSaleRq).ToString();
+
+            DataAccess.UpdateStock(ticketSaleRq);
+
+            return Ok(ticketSaleRs);
         }
     }
 }

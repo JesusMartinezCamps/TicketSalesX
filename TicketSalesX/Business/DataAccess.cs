@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using TicketSalesX.Entities;
+using TicketSalesX.Models;
 
 namespace TicketSalesX.Business
 {
@@ -64,6 +66,66 @@ namespace TicketSalesX.Business
             return ticketList;
         }
 
+        public static void UpdateStock(TicketSaleRq ticketSaleRq)
+        {
+            StringBuilder sb = new StringBuilder("");
+            string[] lines = File.ReadAllLines(festivalsFile);
+            string oldValue, newValue, output = "";
+
+            foreach (string _line in lines)
+            {
+                if (!_line.Contains(ticketSaleRq.FestivalName))
+                {
+                    sb.Append("\r" + _line);
+                }
+                else
+                {
+
+                    oldValue = _line.Split(',').Last();
+
+                    newValue = (Int32.Parse(oldValue) + Int32.Parse(ticketSaleRq.TicketNumber)).ToString();
+                    output = _line.Replace(oldValue.ToString(), newValue + "\r");
+
+                    sb.Append("\r" + output);
+                }
+            }
+            if (File.Exists(festivalsFile))
+            {
+                File.Delete(festivalsFile);
+            }
+            using (FileStream fs = new FileStream(festivalsFile, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write))
+            {
+                StreamWriter sw = new StreamWriter(fs);
+                sw.BaseStream.Seek(0, SeekOrigin.Begin);
+                sw.Write(sb.ToString());
+                sw.Flush();
+                sw.Close();
+            }
+
+            /*
+            while ((line = file.ReadLine()) != null)
+            {
+                if (line.Contains(ticketSaleRq.FestivalName))
+                {
+                    oldValue = int.Parse(line.Split(',').Last());
+                    newValue = (oldValue + int.Parse(ticketSaleRq.TicketNumber)).ToString();
+                    string output = "\r" + line.Replace(oldValue.ToString(), newValue + "\r");
+
+                    line.Remove(0);
+                    file.Close();
+                    using (StreamWriter writer = new StreamWriter(festivalsFile, true))
+                    {
+                        {
+                            writer.Write(output);
+                        }
+                        writer.Close();
+                        break;
+                    }
+                }
+            }
+            */
+        }
+
         //Private Methods
         private static bool FestivalExist(string festivalName)
         {
@@ -81,8 +143,8 @@ namespace TicketSalesX.Business
 
             file.Close();
             return false;
-
         }
+
 
         private static List<Artist> GetArtistsData(string[] artistListTxt, List<Artist> artistList)
         {
@@ -108,13 +170,12 @@ namespace TicketSalesX.Business
             return artistList;
         }
 
+
         private static void UpdateTicketData(Ticket ticket)
         {
             string line;
             string actualTicketNumber;
-            string actualPrice = "";
             StreamReader file = new StreamReader(festivalsFile);
-
 
             while ((line = file.ReadLine()) != null)
             {
@@ -130,7 +191,6 @@ namespace TicketSalesX.Business
 
             file.Close();
         }
-
 
         private static string GetTicketsLeft(string actualTicketNumber)
         {
@@ -166,6 +226,7 @@ namespace TicketSalesX.Business
             file.Close();
             return ticketsLeft;
         }
+
         private static string GetActualTicketPrice(string actualTicketNumber)
         {
             string line;
@@ -240,6 +301,28 @@ namespace TicketSalesX.Business
 
             file.Close();
             return nextPrice;
+        }
+
+        public static string GetFestivalTicketPrice(string festivalName)
+        {
+            //posible refact para poner en un metodo a parte el coger el numero de tickets vendidos
+            string line;
+            string festivalTicketNumber = "0";
+            string ticketPrice;
+            StreamReader file = new StreamReader(festivalsFile);
+
+            while ((line = file.ReadLine()) != null)
+            {
+                if (line.Contains(festivalName))
+                {
+                    festivalTicketNumber = line.Split(',').Last();
+                    break;
+                }
+            }
+
+            file.Close();
+            ticketPrice = GetActualTicketPrice(festivalTicketNumber);
+            return ticketPrice;
         }
     }
 }
