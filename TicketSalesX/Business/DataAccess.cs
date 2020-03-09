@@ -11,10 +11,10 @@ namespace TicketSalesX.Business
 {
     public class DataAccess
     {
-        //Attributes
-        private static readonly string artistsFile = @"C:\Users\GsusM\source\repos\TicketSalesX\TicketSalesX\DataStorage\Artists.txt";
-        private static readonly string festivalsFile = @"C:\Users\GsusM\source\repos\TicketSalesX\TicketSalesX\DataStorage\Festivals.txt";
-        private static readonly string ticketsFile = @"C:\Users\GsusM\source\repos\TicketSalesX\TicketSalesX\DataStorage\Tickets.txt";
+        //Txt Files
+        private static readonly string artistsFile = "..\\TicketSalesX\\DataStorage\\Artists.txt";
+        private static readonly string festivalsFile = "..\\TicketSalesX\\DataStorage\\Festivals.txt";
+        private static readonly string ticketsFile = "..\\TicketSalesX\\DataStorage\\Tickets.txt";
 
         //Public Methods
         public static List<Artist> GetArtistsByFestivalName(string festivalName)
